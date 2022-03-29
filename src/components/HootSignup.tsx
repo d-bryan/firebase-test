@@ -1,21 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebaseSetup';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+
 
 export default function HootSignup() {
-
-    const navigate = useNavigate();
-
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-
-        event.preventDefault(); const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-        navigate("../", { replace: true });
-    };
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const createAccount = async () => {
+        try {
+            await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+        } catch (e) {
+            console.log(e);
+        }
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPassword("");
+    }
     return (
         <Container component="main" maxWidth="xs">
             <Box
@@ -32,7 +41,7 @@ export default function HootSignup() {
                 <Typography>
                     Sign Up
                 </Typography>
-                <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                <Box component="form" noValidate sx={{ mt: 3 }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -43,6 +52,8 @@ export default function HootSignup() {
                                 name="firstName"
                                 autoComplete="given-name"
                                 autoFocus
+                                onChange={(e) => setFirstName(e.target.value)}
+                                value={firstName}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -53,6 +64,8 @@ export default function HootSignup() {
                                 label="Last Name"
                                 name="lastName"
                                 autoComplete="family-name"
+                                onChange={(e) => setLastName(e.target.value)}
+                                value={lastName}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -63,6 +76,8 @@ export default function HootSignup() {
                                 label="Email Address"
                                 name="email"
                                 autoComplete="email"
+                                onChange={(e) => setEmail(e.target.value)}
+                                value={email}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -74,11 +89,13 @@ export default function HootSignup() {
                                 type="password"
                                 id="password"
                                 autoComplete="new-password"
+                                onChange={(e) => setPassword(e.target.value)}
+                                value={password}
                             />
                         </Grid>
                     </Grid>
                     <Button
-                        type="submit"
+                        onClick={createAccount}
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}

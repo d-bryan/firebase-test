@@ -1,7 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import {
     RouteObject, useRoutes
 } from "react-router-dom";
+// import { initializeApp } from 'firebase/app';
+// import { getAnalytics } from 'firebase/analytics';
+// import firebaseConfig from './firebaseSetup';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Example404 from './components/examples/Example404';
 import HootFeed from './components/HootFeed';
@@ -13,7 +16,11 @@ import HootUser from './components/HootUser';
 import HootUserSettings from './components/HootUserSettings';
 import { CssBaseline } from '@mui/material';
 
+
 export default function App() {
+    // Initialize Firebase
+    // const app = initializeApp(firebaseConfig);
+    // getAnalytics(app);
 
     const routes: RouteObject[] = [
         {
